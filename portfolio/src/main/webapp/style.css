@@ -7,3 +7,48 @@
 #greeting-container {
   margin-top: 20px;
 }
+*{
+    font-family: 'Montserrat', sans-serif;
+}
+
+body{
+    background-color: #80808029;
+}
+
+a{
+    text-decoration: none;
+    color: #5593e1;
+    border: black 1px solid;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin: 10px;
+}
+button{
+    text-transform: uppercase;
+    font-weight: bold;
+    background-color: #5f8ec8;
+    border: transparent;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+    outline: none;
+}
+button:hover {
+    background-color: #4b88d3c4;
+}
+
+#content {
+  margin-left: auto;
+  margin-right: auto;
+  width: 650px;
+}
+
+#greeting-container {
+  margin: 15px 0;
+}
+
+#portfolio-pic{
+    width: 80%;
+}
