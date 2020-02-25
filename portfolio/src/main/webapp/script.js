@@ -28,7 +28,7 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
-    function getGreetingMessages(){
+function getGreetingMessages(){
     fetch("/data").then(response => response.json()).then(messages => {
         let list = document.createElement("ul");
         messages.forEach(message => {
