@@ -28,13 +28,19 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
-async function getGreetingMessage(){
-    const response = await fetch("/data");
-    return response.text();
+    function getGreetingMessages(){
+    fetch("/data").then(response => response.json()).then(messages => {
+        let list = document.createElement("ul");
+        messages.forEach(message => {
+            let listItem = document.createElement("li");
+            listItem.appendChild(document.createTextNode(message));
+            list.appendChild(listItem);
+        });
+        document.getElementById("greeting-container").appendChild(list);
+    });
 }
 
 window.onload = () => {
-    getGreetingMessage().then(res =>{
-            document.getElementById("greeting-container").innerHTML = res;
-    })
+    getGreetingMessages();
 }
+
