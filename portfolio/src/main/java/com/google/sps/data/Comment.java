@@ -3,10 +3,14 @@ package com.google.sps.data;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Comment{
-    private List<String> comments = new ArrayList<>();
+public final class Comment{
+    private final long id;
+    private final long timestamp;
+    private final String text;
 
-    public void addComment(String newComment){
-        comments.add(newComment);
+    public Comment(long id, long timestamp, String text){
+        this.id = id;
+        this.timestamp = timestamp;
+        this.text = text;
     }
 }
