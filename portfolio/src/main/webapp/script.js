@@ -56,7 +56,6 @@ function checkCommentValidity(event){
     if(commentField.value.trim() === ""){
         event.preventDefault();
         errorMessage.innerText = "Please enter one or more non-whitespace character"
-        return;
     }
     else{
         errorMessage.innerText = null;
