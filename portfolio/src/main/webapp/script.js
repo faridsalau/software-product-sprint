@@ -29,21 +29,21 @@ function addRandomGreeting() {
 }
 
 function getComments(){
-    fetch("/data").then(response => response.json()).then(res => {
+    fetch("/data").then(response => response.json()).then(json => {
         let list = document.createElement("ol");
-        res.comments.forEach(comment => {
+        json.comments.forEach(comment => {
             let listItem = document.createElement("li");
             listItem.appendChild(document.createTextNode(comment));
             list.appendChild(listItem);
         });
-        buildCommentList(list, res);
+        buildCommentList(list, json);
     });
 }
 
-function buildCommentList(list, res){
+function buildCommentList(list, json){
     const comments = document.getElementById("comments");
     const commentsTitle = document.getElementById("comments-title");
-    const hasComments = res.comments.length > 0;
+    const hasComments = json.comments.length > 0;
     comments.appendChild(list);
     comments.className +=  hasComments ? "comments-border" : "";
     commentsTitle.innerText = hasComments ? "Comments:" : null;
