@@ -52,3 +52,33 @@ button:hover {
 #portfolio-pic{
     width: 80%;
 }
+
+#error-message{
+    color: red;
+}
+
+.textarea-field {
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: #000;
+    width: 95%;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+    resize: none;
+    transition: all 0.2s ease-out;
+    overflow: auto;
+}
+.textarea-field:focus {
+  border-color: transparent;
+}
+
+.comments-border{
+    border: black 1px solid;
+    margin: 10px 0;
+    border-radius: 3px;
+}
+
+.comments-title{
+    margin: 0 10px;
+}

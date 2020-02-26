@@ -22,30 +22,35 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.Gson;
+import com.google.sps.data.Comment;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-    private List<String> messages;
-
-  @Override
-  public void init(){
-      messages = new ArrayList<>();
-      messages.add("Welcome to my portfolio!");
-      messages.add("Hope you're having a great day!");
-      messages.add("This is the last message in the list");
-  }
+  private Comment comments = new Comment();
+  private boolean isEmptyComment;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = convertToJsonUsingGson(messages);  
-    response.setContentType("application/json;");
+    response.setContentType("application/json");
+    String json = new Gson().toJson(comments);
     response.getWriter().println(json);
   }
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      String comment = getComment(request);
+      if(isEmptyComment){
+        response.setContentType("text/html");
+        response.getWriter().println("Please enter a non-empty string");
+        return;
+      }
+      comments.addComment(comment);
+      response.sendRedirect("/index.html");
+  }
 
-  private String convertToJsonUsingGson(List<String> messageList) {
-    Gson gson = new Gson();
-    String json = gson.toJson(messageList);
-    return json;
+  private String getComment(HttpServletRequest request){
+      String comment = request.getParameter("comment");
+      isEmptyComment = comment.isEmpty();
+      return comment;
   }
 }

@@ -28,19 +28,46 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
-function getGreetingMessages(){
-    fetch("/data").then(response => response.json()).then(messages => {
-        let list = document.createElement("ul");
-        messages.forEach(message => {
+function getComments(){
+    fetch("/data").then(response => response.json()).then(res => {
+        let list = document.createElement("ol");
+        res.comments.forEach(comment => {
             let listItem = document.createElement("li");
-            listItem.appendChild(document.createTextNode(message));
+            listItem.appendChild(document.createTextNode(comment));
             list.appendChild(listItem);
         });
-        document.getElementById("greeting-container").appendChild(list);
+        buildCommentList(list, res);
     });
 }
 
+function buildCommentList(list, res){
+    const comments = document.getElementById("comments");
+    const commentsTitle = document.getElementById("comments-title");
+    const hasComments = res.comments.length > 0;
+    comments.appendChild(list);
+    comments.className +=  hasComments ? "comments-border" : "";
+    commentsTitle.innerText = hasComments ? "Comments:" : null;
+    commentsTitle.className += hasComments ? "comments-title" : "";
+}
+
+function checkCommentValidity(event){
+    const commentField = document.getElementById("comment-area");
+    const errorMessage = document.getElementById("error-message");
+    if(commentField.value.trim() === ""){
+        event.preventDefault();
+        errorMessage.innerText = "Please enter one or more non-whitespace character"
+        return;
+    }
+    else{
+        errorMessage.innerText = null;
+    }
+}
+
 window.onload = () => {
-    getGreetingMessages();
+    const submitButton = document.getElementById("submit-btn");
+    submitButton.addEventListener('click', e => {
+        checkCommentValidity(e);
+    });
+    getComments();
 }
 
