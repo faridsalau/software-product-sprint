@@ -65,8 +65,8 @@ function checkCommentValidity(event){
 
 window.onload = () => {
     const submitButton = document.getElementById("submit-btn");
-    submitButton.addEventListener('click', e => {
-        checkCommentValidity(e);
+    submitButton.addEventListener('click', event => {
+        checkCommentValidity(event);
     });
     getComments();
 }
