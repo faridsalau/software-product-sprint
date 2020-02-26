@@ -30,10 +30,13 @@ function addRandomGreeting() {
 
 function getComments() {
     fetch("/data").then(response => response.json()).then(json => {
-        let list = document.createElement("ol");
-        json.comments.forEach(comment => {
-            let listItem = document.createElement("li");
-            listItem.appendChild(document.createTextNode(comment));
+        let list = document.createElement("div");
+        list.className += "comments-text"
+        json.forEach(comment => {
+            const timestamp = new Date(comment.timestamp);
+            const date = timestamp.toDateString();
+            let listItem = document.createElement("p");
+            listItem.appendChild(document.createTextNode(date + ": " + comment.text));
             list.appendChild(listItem);
         });
         buildCommentList(list, json);
@@ -43,11 +46,11 @@ function getComments() {
 function buildCommentList(list, json) {
     const comments = document.getElementById("comments");
     const commentsTitle = document.getElementById("comments-title");
-    const hasComments = json.comments.length > 0;
+    const hasComments = json.length > 0;
     comments.appendChild(list);
     comments.className +=  hasComments ? "comments-border" : "";
     commentsTitle.innerText = hasComments ? "Comments:" : null;
-    commentsTitle.className += hasComments ? "comments-title" : "";
+    commentsTitle.className += hasComments ? "comments-text" : "";
 }
 
 function checkCommentValidity(event) {
