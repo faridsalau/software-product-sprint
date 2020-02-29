@@ -3,10 +3,10 @@ package com.google.sps.data;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Comment{
+public class Comments {
     private List<String> comments = new ArrayList<>();
 
-    public void addComment(String newComment){
+    public void addComment(String newComment) {
         comments.add(newComment);
     }
 }

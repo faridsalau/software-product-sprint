@@ -7,15 +7,15 @@
 #greeting-container {
   margin-top: 20px;
 }
-*{
+* {
     font-family: 'Montserrat', sans-serif;
 }
 
-body{
+body {
     background-color: #80808029;
 }
 
-a{
+a {
     text-decoration: none;
     color: #5593e1;
     border: black 1px solid;
@@ -23,7 +23,7 @@ a{
     border-radius: 3px;
     margin: 10px;
 }
-button{
+button {
     text-transform: uppercase;
     font-weight: bold;
     background-color: #5f8ec8;
@@ -49,11 +49,11 @@ button:hover {
   margin: 15px 0;
 }
 
-#portfolio-pic{
+#portfolio-pic {
     width: 80%;
 }
 
-#error-message{
+#error-message {
     color: red;
 }
 
@@ -73,12 +73,12 @@ button:hover {
   border-color: transparent;
 }
 
-.comments-border{
+.comments-border {
     border: black 1px solid;
     margin: 10px 0;
     border-radius: 3px;
 }
 
-.comments-title{
+.comments-title {
     margin: 0 10px;
 }

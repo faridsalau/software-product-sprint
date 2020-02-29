@@ -28,7 +28,7 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
-function getComments(){
+function getComments() {
     fetch("/data").then(response => response.json()).then(json => {
         let list = document.createElement("ol");
         json.comments.forEach(comment => {
@@ -40,7 +40,7 @@ function getComments(){
     });
 }
 
-function buildCommentList(list, json){
+function buildCommentList(list, json) {
     const comments = document.getElementById("comments");
     const commentsTitle = document.getElementById("comments-title");
     const hasComments = json.comments.length > 0;
@@ -50,14 +50,14 @@ function buildCommentList(list, json){
     commentsTitle.className += hasComments ? "comments-title" : "";
 }
 
-function checkCommentValidity(event){
+function checkCommentValidity(event) {
     const commentField = document.getElementById("comment-area");
     const errorMessage = document.getElementById("error-message");
-    if(commentField.value.trim() === ""){
+    if(commentField.value.trim() === "") {
         event.preventDefault();
-        errorMessage.innerText = "Please enter one or more non-whitespace character"
+        errorMessage.innerText = "Please enter one or more non-whitespace character";
     }
-    else{
+    else {
         errorMessage.innerText = null;
     }
 }
@@ -69,4 +69,5 @@ window.onload = () => {
     });
     getComments();
 }
+
 

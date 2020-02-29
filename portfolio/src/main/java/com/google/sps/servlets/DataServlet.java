@@ -22,13 +22,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.Gson;
-import com.google.sps.data.Comment;
+import com.google.sps.data.Comments;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-  private Comment comments = new Comment();
-  private boolean isEmptyComment;
+  private Comments comments = new Comments();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -36,10 +35,11 @@ public class DataServlet extends HttpServlet {
     String json = new Gson().toJson(comments);
     response.getWriter().println(json);
   }
+
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       String comment = getComment(request);
-      if(isEmptyComment){
+      if(comment.isEmpty()) {
         response.setContentType("text/html");
         response.getWriter().println("Please enter a non-empty string");
         return;
@@ -48,9 +48,8 @@ public class DataServlet extends HttpServlet {
       response.sendRedirect("/index.html");
   }
 
-  private String getComment(HttpServletRequest request){
+  private String getComment(HttpServletRequest request) {
       String comment = request.getParameter("comment");
-      isEmptyComment = comment.isEmpty();
       return comment;
   }
 }
