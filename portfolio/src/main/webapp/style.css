@@ -68,6 +68,7 @@ button:hover {
     resize: none;
     transition: all 0.2s ease-out;
     overflow: auto;
+    background-color: #eaeaea;
 }
 .textarea-field:focus {
   border-color: transparent;
