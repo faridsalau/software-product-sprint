@@ -24,6 +24,15 @@
       <div id="greeting-container"></div>
       <a target="_blank" style="margin:0;" href="https://www.linkedin.com/in/faridsalau/">Let's Connect!</a>
       <a target="_blank" href="https://github.com/faridsalau/">GitHub</a>
+      <form action="/data" method="POST">
+        <p>Add a comment:</p>
+            <textarea class="textarea-field" name="comment" id="comment-area"></textarea>
+        <p id="error-message"></p>
+        <button id="submit-btn" type="submit">Submit comment</button>
+      </form>
+      <div id="comments">
+          <h2 id="comments-title"></h2>
+      </div>
     </div>
   </body>
 </html>

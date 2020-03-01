@@ -27,3 +27,47 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
+
+function getComments() {
+    fetch("/data").then(response => response.json()).then(json => {
+        let list = document.createElement("ol");
+        json.comments.forEach(comment => {
+            let listItem = document.createElement("li");
+            listItem.appendChild(document.createTextNode(comment));
+            list.appendChild(listItem);
+        });
+        buildCommentList(list, json);
+    });
+}
+
+function buildCommentList(list, json) {
+    const comments = document.getElementById("comments");
+    const commentsTitle = document.getElementById("comments-title");
+    const hasComments = json.comments.length > 0;
+    comments.appendChild(list);
+    comments.className +=  hasComments ? "comments-border" : "";
+    commentsTitle.innerText = hasComments ? "Comments:" : null;
+    commentsTitle.className += hasComments ? "comments-title" : "";
+}
+
+function checkCommentValidity(event) {
+    const commentField = document.getElementById("comment-area");
+    const errorMessage = document.getElementById("error-message");
+    if(commentField.value.trim() === "") {
+        event.preventDefault();
+        errorMessage.innerText = "Please enter one or more non-whitespace character";
+    }
+    else {
+        errorMessage.innerText = null;
+    }
+}
+
+window.onload = () => {
+    const submitButton = document.getElementById("submit-btn");
+    submitButton.addEventListener('click', event => {
+        checkCommentValidity(event);
+    });
+    getComments();
+}
+
+
