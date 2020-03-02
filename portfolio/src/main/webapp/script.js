@@ -15,6 +15,8 @@
 /**
  * Adds a random greeting to the page.
  */
+var map;
+
 function addRandomGreeting() {
   const greetings =
       ['I love music!', 'I have a fake tooth :(',
@@ -62,12 +64,21 @@ function checkCommentValidity(event) {
     }
 }
 
+function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: -34.397, lng: 150.644},
+        zoom: 8
+    });
+}
+
 window.onload = () => {
     const submitButton = document.getElementById("submit-btn");
-    submitButton.addEventListener('click', event => {
-        checkCommentValidity(event);
-    });
-    getComments();
+    if(submitButton) {
+        submitButton.addEventListener('click', event => {
+            checkCommentValidity(event);
+        });
+        getComments();
+    }
 }
 
 
