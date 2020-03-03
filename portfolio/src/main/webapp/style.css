@@ -66,6 +66,10 @@ button:hover {
     color: red;
 }
 
+#comments {
+    padding: 0 10px;
+}
+
 .textarea-field {
     outline: 0;
     border-width: 0 0 2px;
