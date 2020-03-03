@@ -54,7 +54,7 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      String comment = getComment(request);
+      String comment = request.getParameter("comment");
       if(comment.isEmpty()) {
         response.setContentType("text/html");
         response.getWriter().println("Please enter a non-empty string");
@@ -64,7 +64,7 @@ public class DataServlet extends HttpServlet {
       response.sendRedirect("/index.html");
   }
 
-  private void sendToDatastore(String comment){
+  private void sendToDatastore(String comment) {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       long timestamp = System.currentTimeMillis();
       Entity commentEntity = new Entity("Comment");
@@ -72,10 +72,5 @@ public class DataServlet extends HttpServlet {
       commentEntity.setProperty("text", comment);
       commentEntity.setProperty("timestamp", timestamp);
       datastore.put(commentEntity);
-  }
-
-  private String getComment(HttpServletRequest request){
-      String comment = request.getParameter("comment");
-      return comment;
   }
 }
