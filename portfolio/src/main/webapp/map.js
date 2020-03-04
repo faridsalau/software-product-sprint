@@ -1,4 +1,4 @@
-function initMap() {
+async function initMap() {
     const mapOptions = {
         // Oxford, MS
         center: {lat: 34.3668, lng: -89.5186},
@@ -25,20 +25,8 @@ function initMap() {
             position: {lat: 34.3662, lng: -89.5380}
         }
     ]
-    
-  var contentString = '<div id="content">'+
-      '<div id="siteNotice">'+
-      '</div>'+
-      '<h1 id="firstHeading" class="firstHeading">Oxford</h1>'+
-      '<div id="bodyContent">'+
-      '<p>Although I was born in Nigeria, I have lived in Oxford, Mississipi ' +
-      'for the majority of my life. I moved here because my dad got a job '+
-      'to teach at the University of Mississippi. I did all of my 1-12 education '+
-      'here and now I am doing my post-secondary education here :)' 
-      '</div>'+
-      '</div>';
     const infowindow = new google.maps.InfoWindow({
-        content: contentString
+        content: await getMapContent()
     });
     features.forEach((_, index) => {
         var marker = new google.maps.Marker({
@@ -57,4 +45,10 @@ function initMap() {
        }
     });
     
+}
+
+async function getMapContent(){
+    const data = await fetch("map-content.html");
+    const html = await data.text();
+    return html;
 }
