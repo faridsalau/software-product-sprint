@@ -67,42 +67,6 @@ function checkCommentValidity(event) {
     }
 }
 
-function initMap() {
-    const mapOptions = {
-        center: {lat: 34.3668, lng: -89.5186},
-        zoom: 14,
-        minZoom: 14,
-        mapTypeId: google.maps.MapTypeId.HYBRID,
-        gestureHandling: "auto"
-    };
-
-    map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-    const features = [
-        {
-            title:"My hometown!",
-            icon: "http://maps.google.com/mapfiles/ms/micons/rangerstation.png",
-            position: {lat: 34.3668, lng: -89.5186}
-        },
-        {
-            title: "My School!",
-            icon: "http://maps.google.com/mapfiles/ms/micons/question.png",
-            position: {lat: 34.3662, lng: -89.5380}
-        }
-    ]
-    features.forEach((_, index) => {
-        var marker = new google.maps.Marker({
-        map: map,
-        draggable: false,
-        animation: google.maps.Animation.DROP,
-        position: features[index].position,
-        icon: features[index].icon,
-        title: features[index].title
-        });
-    });
-    
-}
-
 window.onload = () => {
     const submitButton = document.getElementById("submit-btn");
     if(submitButton) {
