@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Set;
 
 public final class FindMeetingQuery {
+  
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     final Collection<String> requestAttendees = request.getAttendees();
     final long requestDuration = request.getDuration();
@@ -34,6 +35,7 @@ public final class FindMeetingQuery {
     }
     return findMeetings(eventList, requestDuration);
   }
+  
    private ArrayList<TimeRange> createEventList(Collection<Event> events, Collection<String> requestAttendees) {
       ArrayList<TimeRange> eventList = new ArrayList<>();
       for(Event event: events) {
