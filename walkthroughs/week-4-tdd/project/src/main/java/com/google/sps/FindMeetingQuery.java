@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
 
 public final class FindMeetingQuery {
 
@@ -71,15 +70,14 @@ public final class FindMeetingQuery {
 
   private Collection<TimeRange> availableTimes(ArrayList<TimeRange> eventList, long requestDuration) {
     ArrayList<TimeRange> ret = new ArrayList<>();
-    TimeRange firstRange = eventList.get(0);
     int size = eventList.size();
+    TimeRange firstRange = eventList.get(0);
+    TimeRange lastRange = eventList.get(size - 1);
 
     if(firstRange.equals(TimeRange.WHOLE_DAY)) {
         return Arrays.asList();
     }
     
-    TimeRange lastRange = eventList.get(size - 1);
-
     handleFirstListItem(firstRange, requestDuration, ret);
 
     for(int i = 0; i < size - 1; i++) {
