@@ -21,41 +21,41 @@ import java.util.Collections;
 import java.util.Set;
 
 public final class FindMeetingQuery {
+
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     final Collection<String> requestAttendees = request.getAttendees();
     final long requestDuration = request.getDuration();
-    ArrayList<TimeRange> eventList = createFlattenedEventList(events, requestAttendees);
-
     if(requestDuration > TimeRange.WHOLE_DAY.duration()) {
         return Arrays.asList();
     }
-    if(requestAttendees.isEmpty() || eventList.isEmpty()) {
+    if(requestAttendees.isEmpty()) {
         return Arrays.asList(TimeRange.WHOLE_DAY);
     }
-    return findMeetings(eventList, requestDuration);
+    ArrayList<TimeRange> eventList = flatList(events, requestAttendees);
+    if(eventList.isEmpty()) {
+        return Arrays.asList(TimeRange.WHOLE_DAY);
+    }
+    return availableTimes(eventList, requestDuration);
   }
+
    private ArrayList<TimeRange> createEventList(Collection<Event> events, Collection<String> requestAttendees) {
       ArrayList<TimeRange> eventList = new ArrayList<>();
-      for(Event event: events) {
-          Set<String> attendees = event.getAttendees();
-          for(String attendee: attendees) {
+      for(Event event: events) {      
+          for(String attendee: event.getAttendees()) {
               if(requestAttendees.contains(attendee)) {
                 eventList.add(event.getWhen());
+                break;
               }
           }
       }
       return eventList;
   }
 
-  private ArrayList<TimeRange> createFlattenedEventList(Collection<Event> events, Collection<String> requestAttendees) {
+  private ArrayList<TimeRange> flatList(Collection<Event> events, Collection<String> requestAttendees) {
       ArrayList<TimeRange> eventList = createEventList(events, requestAttendees);
       ArrayList<TimeRange> ret = new ArrayList<>();
       Collections.sort(eventList, TimeRange.ORDER_BY_START);
       int size = eventList.size();
-      if(size == 1) {
-          ret.add(eventList.get(0));
-          return ret;
-      }
       for(int i = 0; i < size; i++) {
           TimeRange curr = eventList.get(i);
           TimeRange next = i + 1 == size ? null : eventList.get(i + 1);
@@ -69,63 +69,44 @@ public final class FindMeetingQuery {
       return ret;
   }
 
-  private Collection<TimeRange> findMeetings(ArrayList<TimeRange> eventList, long requestDuration) {
-      ArrayList<TimeRange> ret = new ArrayList<>();
-      TimeRange firstRange = eventList.get(0);
-      if(eventList.get(0).equals(TimeRange.WHOLE_DAY)) {
-          return Arrays.asList();
-      }
+  private Collection<TimeRange> availableTimes(ArrayList<TimeRange> eventList, long requestDuration) {
+    ArrayList<TimeRange> ret = new ArrayList<>();
+    TimeRange firstRange = eventList.get(0);
+    int size = eventList.size();
 
-      if(eventList.size() == 1) {
-          handleSingleList(firstRange, requestDuration, ret);
-          return ret;
-      } 
-      else {
-          int size = eventList.size();
-          TimeRange lastRange = eventList.get(size - 1);
-          handleFirstListItem(firstRange, requestDuration, ret);
-          for(int i = 0; i < size - 1; i++) {
-              int start = eventList.get(i).end();
-              int end = eventList.get(i + 1).start();
-              if(end - start >= requestDuration) {
-                  ret.add(TimeRange.fromStartEnd(start, end, false));
-              }
-          }
-          handleLastListItem(lastRange, requestDuration, ret);
-      }
-      return ret;
+    if(firstRange.equals(TimeRange.WHOLE_DAY)) {
+        return Arrays.asList();
+    }
+    
+    TimeRange lastRange = eventList.get(size - 1);
+
+    handleFirstListItem(firstRange, requestDuration, ret);
+
+    for(int i = 0; i < size - 1; i++) {
+        int start = eventList.get(i).end();
+        int end = eventList.get(i + 1).start();
+        if(end - start >= requestDuration) {
+            ret.add(TimeRange.fromStartEnd(start, end, false));
+        }
+    }
+
+    handleLastListItem(lastRange, requestDuration, ret);
+      
+    return ret;
   }
 
-  private void handleSingleList(TimeRange range, long requestDuration, ArrayList<TimeRange> ret) {
-      int endOfDay = TimeRange.WHOLE_DAY.end();
-      int startOfDay = TimeRange.WHOLE_DAY.start();
-
-      if(range.start() == startOfDay && endOfDay - range.end() >= requestDuration) {
-          ret.add(TimeRange.fromStartEnd(range.end(), endOfDay, false));
-      }
-      else {
-          if(range.start() >= requestDuration) {
-              ret.add(TimeRange.fromStartEnd(startOfDay, range.start(), false));
-          }
-
-          if(endOfDay - range.end() >= requestDuration) {
-              ret.add(TimeRange.fromStartEnd(range.end(), endOfDay, false));
-          }
-      }
-  }
-
-  public void handleFirstListItem(TimeRange firstRange, long requestDuration, ArrayList<TimeRange> ret) {
+  private void handleFirstListItem(TimeRange firstRange, long requestDuration, ArrayList<TimeRange> ret) {
       int startOfDay = TimeRange.WHOLE_DAY.start();
       int start = firstRange.start();
-      if(start != startOfDay && start >= requestDuration) {
+      if(start >= requestDuration) {
           ret.add(TimeRange.fromStartEnd(startOfDay, start, false));
       }
   }
 
-  public void handleLastListItem(TimeRange lastRange, long requestDuration, ArrayList<TimeRange> ret) {
+  private void handleLastListItem(TimeRange lastRange, long requestDuration, ArrayList<TimeRange> ret) {
       int endOfDay = TimeRange.WHOLE_DAY.end();
       int end = lastRange.end();
-      if(end != endOfDay && endOfDay - end >= requestDuration) {
+      if(endOfDay - end >= requestDuration) {
           ret.add(TimeRange.fromStartEnd(end, endOfDay, false));
       }
   }
