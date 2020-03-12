@@ -43,6 +43,7 @@ public final class FindMeetingQuery {
           for(String attendee: attendees) {
               if(requestAttendees.contains(attendee)) {
                 eventList.add(event.getWhen());
+                break;
               }
           }
       }
