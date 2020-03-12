@@ -114,7 +114,7 @@ public final class FindMeetingQuery {
       }
   }
 
-  public void handleFirstListItem(TimeRange firstRange, long requestDuration, ArrayList<TimeRange> ret) {
+  private void handleFirstListItem(TimeRange firstRange, long requestDuration, ArrayList<TimeRange> ret) {
       int startOfDay = TimeRange.WHOLE_DAY.start();
       int start = firstRange.start();
       if(start != startOfDay && start >= requestDuration) {
@@ -122,7 +122,7 @@ public final class FindMeetingQuery {
       }
   }
 
-  public void handleLastListItem(TimeRange lastRange, long requestDuration, ArrayList<TimeRange> ret) {
+  private void handleLastListItem(TimeRange lastRange, long requestDuration, ArrayList<TimeRange> ret) {
       int endOfDay = TimeRange.WHOLE_DAY.end();
       int end = lastRange.end();
       if(end != endOfDay && endOfDay - end >= requestDuration) {
