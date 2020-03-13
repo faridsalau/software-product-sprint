@@ -30,11 +30,11 @@ public final class FindMeetingQuery {
     if (requestAttendees.isEmpty()) {
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
-    ArrayList<TimeRange> eventList = flatList(events, requestAttendees);
+    ArrayList<TimeRange> eventList = createFlattenedEventList(events, requestAttendees);
     if (eventList.isEmpty()) {
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
-    return availableTimes(eventList, requestDuration);
+    return findMeetings(eventList, requestDuration);
   }
 
   private ArrayList<TimeRange> createEventList(Collection<Event> events, Collection<String> requestAttendees) {
@@ -50,9 +50,9 @@ public final class FindMeetingQuery {
     return eventList;
   }
 
-  private ArrayList<TimeRange> flatList(Collection<Event> events, Collection<String> requestAttendees) {
+  private ArrayList<TimeRange> createFlattenedEventList(Collection<Event> events, Collection<String> requestAttendees) {
     ArrayList<TimeRange> eventList = createEventList(events, requestAttendees);
-    ArrayList<TimeRange> ret = new ArrayList<>();
+    ArrayList<TimeRange> flatList = new ArrayList<>();
     Collections.sort(eventList, TimeRange.ORDER_BY_START);
     int size = eventList.size();
     for (int i = 0; i < size; i++) {
@@ -61,47 +61,47 @@ public final class FindMeetingQuery {
       if (next != null && curr.overlaps(next)) {
         eventList.set(i + 1, TimeRange.fromStartEnd(curr.start(), Math.max(next.end(), curr.end()), false));
       } else {
-        ret.add(curr);
+        flatList.add(curr);
       }
     }
-    return ret;
+    return flatList;
   }
 
-  private Collection<TimeRange> availableTimes(ArrayList<TimeRange> eventList, long requestDuration) {
-    ArrayList<TimeRange> ret = new ArrayList<>();
+  private Collection<TimeRange> findMeetings(ArrayList<TimeRange> eventList, long requestDuration) {
+    ArrayList<TimeRange> availableTimes = new ArrayList<>();
     TimeRange firstRange = eventList.get(0);
     TimeRange lastRange = eventList.get(eventList.size() - 1);
     if (firstRange.equals(TimeRange.WHOLE_DAY)) {
       return Arrays.asList();
     }
-    handleFirstListItem(firstRange, requestDuration, ret);
-    handleInnerListItems(eventList, requestDuration, ret);
-    handleLastListItem(lastRange, requestDuration, ret);
-    return ret;
+    handleFirstListItem(firstRange, requestDuration, availableTimes);
+    handleInnerListItems(eventList, requestDuration, availableTimes);
+    handleLastListItem(lastRange, requestDuration, availableTimes);
+    return availableTimes;
   }
 
-  private void handleFirstListItem(TimeRange firstRange, long requestDuration, ArrayList<TimeRange> ret) {
+  private void handleFirstListItem(TimeRange firstRange, long requestDuration, ArrayList<TimeRange> availableTimes) {
     int startOfDay = TimeRange.WHOLE_DAY.start();
     int start = firstRange.start();
     if (start >= requestDuration) {
-      ret.add(TimeRange.fromStartEnd(startOfDay, start, false));
+      availableTimes.add(TimeRange.fromStartEnd(startOfDay, start, false));
     }
   }
 
-  private void handleLastListItem(TimeRange lastRange, long requestDuration, ArrayList<TimeRange> ret) {
+  private void handleLastListItem(TimeRange lastRange, long requestDuration, ArrayList<TimeRange> availableTimes) {
     int endOfDay = TimeRange.WHOLE_DAY.end();
     int end = lastRange.end();
     if (endOfDay - end >= requestDuration) {
-      ret.add(TimeRange.fromStartEnd(end, endOfDay, false));
+      availableTimes.add(TimeRange.fromStartEnd(end, endOfDay, false));
     }
   }
 
-  private void handleInnerListItems(ArrayList<TimeRange> eventList, long requestDuration, ArrayList<TimeRange> ret) {
+  private void handleInnerListItems(ArrayList<TimeRange> eventList, long requestDuration, ArrayList<TimeRange> availableTimes) {
     for (int i = 0; i < eventList.size() - 1; i++) {
       int start = eventList.get(i).end();
       int end = eventList.get(i + 1).start();
       if (end - start >= requestDuration) {
-        ret.add(TimeRange.fromStartEnd(start, end, false));
+        availableTimes.add(TimeRange.fromStartEnd(start, end, false));
       }
     }
   }
